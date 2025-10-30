@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyDay Web Task Dashboard</title>
+     <link href="css/style.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <button id="menu-toggle" aria-label="Toggle menu">
+        
+        <svg class="w-6 h-6" style="color: #374151;" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+    </button>
+    <div id="sidebar-overlay"></div>
+
+    <div id="sidebar" class="sidebar">
+        <div class="mb-8" style="border-bottom: 1px solid #e5e7eb; padding-bottom: 1rem;">
+            <h1 class="text-xl font-semibold" style="color: #1f2937;">MyDay Web</h1>
+        </div>
+        
+        <nav id="nav-list">
+        </nav>
+    </div>
+
+    <main id="main-content" class="main-content">
+    </main>
+
+    <div id="task-modal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center" style="border-bottom: 1px solid #e5e7eb; padding-bottom: 0.75rem; margin-bottom: 1rem;">
+                <h3 class="text-xl font-semibold" style="color: #1f2937;">Add New Task</h3>
+                <button onclick="closeModal()" style="color: #9ca3af; background: none; border: none; cursor: pointer; padding: 0;">
+             
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            
+            <form id="add-task-form">
+             
+                <div class="mb-4">
+                    <label for="task-title" class="text-sm font-medium" style="display: block; color: #374151;">Title <span style="color: #ef4444;">*</span></label>
+                    <input type="text" id="task-title" required class="modal-input" placeholder="What do you want to do?">
+                    <p class="text-xs" style="color: #6b7280; margin-top: 0.25rem;">Press Enter to add, Shift+Enter to add and stay open</p>
+                </div>
+
+                <div class="mb-4">
+                    <label for="task-description" class="text-sm font-medium" style="display: block; color: #374151;">Description</label>
+                    <textarea id="task-description" rows="3" class="modal-input" placeholder="Add more details..." style="resize: vertical;"></textarea>
+                </div>
+
+                <div class="mb-4">
+                    <label for="task-due-date" class="text-sm font-medium" style="display: block; color: #374151;">Due Date</label>
+                    <div class="flex items-center" style="margin-top: 0.25rem;">
+                        <input type="date" id="task-due-date" class="modal-input" style="border-radius: 0.5rem 0 0 0.5rem; border-right: none;">
+                       
+                        <span style="background-color: #f3f4f6; padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 0 0.5rem 0.5rem 0;">
+                            <svg class="w-5 h-5" style="color: #6b7280;" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h.01M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        </span>
+                    </div>
+                    <div style="margin-top: 0.5rem; display: flex; gap: 0.5rem;">
+                        <button type="button" onclick="setDueDate('today')" class="text-xs" style="padding: 0.25rem 0.5rem; background-color: #e5e7eb; color: #374151; border-radius: 9999px; border: none; cursor: pointer;">Today</button>
+                        <button type="button" onclick="setDueDate('tomorrow')" class="text-xs" style="padding: 0.25rem 0.5rem; background-color: #e5e7eb; color: #374151; border-radius: 9999px; border: none; cursor: pointer;">Tomorrow</button>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="text-sm font-medium mb-2" style="display: block; color: #374151;">Priority</label>
+                    <div id="priority-options" class="flex" style="gap: 0.5rem;">
+                        <button type="button" data-priority="Low" class="priority-btn">Low</button>
+                        <button type="button" data-priority="Medium" class="priority-btn selected-medium">Medium</button>
+                        <button type="button" data-priority="High" class="priority-btn">High</button>
+                        <input type="hidden" id="task-priority" value="Medium">
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="task-tags-input" class="text-sm font-medium" style="display: block; color: #374151;">Tags</label>
+                    <input type="text" id="task-tags-input" class="modal-input" placeholder="Add tags (e.g., work, urgent)...">
+                    <p class="text-xs" style="color: #6b7280; margin-top: 0.25rem;">Separate tags with commas. Max 6 tags.</p>
+                </div>
+                <div id="task-tags-display" class="mb-4 flex" style="gap: 0.5rem; flex-wrap: wrap; min-height: 20px;">
+                   
+                </div>
+
+                <div class="mb-6">
+                    <label for="task-category" class="text-sm font-medium" style="display: block; color: #374151;">Category</label>
+                    <select id="task-category" class="modal-input">
+                        <option value="Work">Work</option>
+                        <option value="Personal">Personal</option>
+                    </select>
+                </div>
+                
+                <div class="flex justify-end" style="gap: 0.75rem;">
+                    <button type="button" onclick="closeModal()" style="padding: 0.5rem 1rem; color: #374151; background-color: #e5e7eb; border-radius: 0.5rem; border: none; cursor: pointer; font-weight: 500;">Cancel</button>
+                    <button type="submit" style="padding: 0.5rem 1rem; background-color: #10b981; color: white; font-weight: 500; border-radius: 0.5rem; border: none; cursor: pointer; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); transition: background-color 0.15s;" 
+                            onmouseover="this.style.backgroundColor='#059669'" onmouseout="this.style.backgroundColor='#10b981'">Add Task</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="message-box">
+        Task added successfully!
+    </div>
+    
+<script src="js/section.js"></script>
+</body>
+</html>
